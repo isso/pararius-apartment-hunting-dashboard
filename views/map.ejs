@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<title>Pararius Tracking Dashboard</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<!--===============================================================================================-->
+	<link rel="icon" type="image/png" href="/images/icons/favicon.ico" />
+	<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="/vendor/bootstrap/css/bootstrap.min.css">
+	<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="/fonts/font-awesome-4.7.0/css/font-awesome.min.css">
+	<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="/vendor/animate/animate.css">
+	<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="/vendor/select2/select2.min.css">
+	<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="/vendor/perfect-scrollbar/perfect-scrollbar.css">
+	<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="/stylesheets/util.css">
+	<link rel="stylesheet" type="text/css" href="/stylesheets/main.css">
+	<!--===============================================================================================-->
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+	<base href="/map/<%= pagination.state!='new'?pagination.state+'/':'' %>">
+
+</head>
+<% var paginationButtonsCount=1 %>
+<% var minPage=(pagination.page-paginationButtonsCount <= 1 ? 1:pagination.page-paginationButtonsCount) %>
+<% var maxPage=(pagination.page+paginationButtonsCount >= pagination.pages ? pagination.pages:pagination.page+paginationButtonsCount) %>
+
+<body data-current-state="<%= pagination.state%>" data-current-page="<%= pagination.page%>">
+	<div class="center">
+		<img class="header_image" src="/images/icons/pararius.png" />
+	</div>
+	<div class="limiter">
+		<div class="container-table">
+			<div class="wrap-table">
+				<div class="navigation center">
+					<div class="pagination" style="float: left;">
+						<a href="/map" class="<%= pagination.state=='new'? 'active' : '' %>">New</a>
+						<a href="/map/interesting"
+							class="<%= pagination.state=='interesting'? 'active' : '' %>">Interesting</a>
+						<a href="/map/shortlisted"
+							class="<%= pagination.state=='shortlisted'? 'active' : '' %>">Shortlisted</a>
+						<a href="/map/hidden" class="<%= pagination.state=='hidden'? 'active' : '' %>">Hidden</a>
+						<a href="/map/all" class="<%= pagination.state=='all'? 'active' : '' %>">All</a>
+					</div>
+					<div class="pagination">
+						<div class="counter"><%= pagination.total %> Properties</div>
+						<a href="/<%= pagination.state%>/page-<%= pagination.page %>">List</a>
+						<a href="/map/<%= pagination.state%>/page-<%= pagination.page %>" class="active">Map</a>
+					</div>
+					<% if(pagination.pages>1){ %>
+					<div class="pagination" style="float: right;">
+						<% if(pagination.page>1){ %>
+						<a href="./page-<%= pagination.page-1 %>">&laquo;</a>
+						<% } %>
+						<% for (var i = minPage; i <= maxPage; i++) { %>
+						<a href="./page-<%= i%>" class="<%= i==pagination.page ? 'active' : '' %>"><%= i %></a>
+						<% } %>
+						<% if(pagination.page < pagination.pages){ %>
+						<a href="./page-<%= pagination.page+1 %>">&raquo;</a>
+						<% } %>
+					</div>
+					<% } %>
+				</div>
+				<div class="table">
+					<% if (properties.length==0){ %>
+					<div id="empty-gif">
+						<p>Nothing in here bro ¯\_(ツ)_/¯</p>
+						<img src="/images/empty.gif" />
+					</div>
+					<% } else { %>
+					<div id="map"></div>
+					<% } %>
+				</div>
+				<% if(pagination.pages>1){ %>
+				<div class="pagination" style="float: right;">
+					<% if(minPage>1){ %>
+					<a href="./page-<%= minPage-1 %>">&laquo;</a>
+					<% } %>
+					<% for (var i = minPage; i <= maxPage; i++) { %>
+					<a href="./page-<%= i%>" class="<%= i==pagination.page ? 'active' : '' %>"><%= i %></a>
+					<% } %>
+					<% if(pagination.page < maxPage){ %>
+					<a href="./page-<%= maxPage+1 %>">&raquo;</a>
+					<% } %>
+				</div>
+				<% } %>
+			</div>
+		</div>
+	</div>
+	<div id="notesModal" class="modal">
+		<div class="modal-content">
+			<textarea id="notes-edit-text" rows="4"></textarea>
+			<span style="display: inline-block; text-align: center;">
+				<i id="modal-check" onclick="updateNotes(this)" class="material-icons modal-button">check</i>
+				<i id="modal-close" onclick="closeEditModal()" class="material-icons modal-button">close</i>
+			</span>
+
+		</div>
+
+	</div>
+
+
+	<!--===============================================================================================-->
+	<script src="/vendor/jquery/jquery-3.2.1.min.js"></script>
+	<!--===============================================================================================-->
+	<script src="/vendor/bootstrap/js/popper.js"></script>
+	<script src="/vendor/bootstrap/js/bootstrap.min.js"></script>
+	<!--===============================================================================================-->
+	<script src="/vendor/select2/select2.min.js"></script>
+	<!--===============================================================================================-->
+	<script src="/javascripts/main.js"></script>
+	<!--===============================================================================================-->
+	<script async defer src="https://maps.googleapis.com/maps/api/js?key=<%= apiKey %>&callback=initMap">
+	</script>
+
+</body>
+
+</html>

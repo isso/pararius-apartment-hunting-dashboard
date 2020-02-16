@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<title>Pararius Tracking Dashboard</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<!--===============================================================================================-->
+	<link rel="icon" type="image/png" href="/images/icons/favicon.ico" />
+	<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="/vendor/bootstrap/css/bootstrap.min.css">
+	<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="/fonts/font-awesome-4.7.0/css/font-awesome.min.css">
+	<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="/vendor/animate/animate.css">
+	<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="/vendor/select2/select2.min.css">
+	<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="/vendor/perfect-scrollbar/perfect-scrollbar.css">
+	<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="/stylesheets/util.css">
+	<link rel="stylesheet" type="text/css" href="/stylesheets/main.css">
+	<!--===============================================================================================-->
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+	<base href="/<%= pagination.state!='new'?pagination.state+'/':'' %>">
+</head>
+<% var paginationButtonsCount=1 %>
+<% var minPage=(pagination.page-paginationButtonsCount <= 1 ? 1:pagination.page-paginationButtonsCount) %>
+<% var maxPage=(pagination.page+paginationButtonsCount >= pagination.pages ? pagination.pages:pagination.page+paginationButtonsCount) %>
+
+<body data-current-state="<%= pagination.state%>">
+	<div class="center">
+		<img class="header_image" src="/images/icons/pararius.png" />
+	</div>
+	<div class="limiter">
+		<div class="container-table">
+			<div class="wrap-table">
+				<div class="navigation center">
+					<div class="pagination" style="float: left;">
+						<a href="/" class="<%= pagination.state=='new'? 'active' : '' %>">New</a>
+						<a href="/interesting"
+							class="<%= pagination.state=='interesting'? 'active' : '' %>">Interesting</a>
+						<a href="/shortlisted"
+							class="<%= pagination.state=='shortlisted'? 'active' : '' %>">Shortlisted</a>
+						<a href="/hidden" class="<%= pagination.state=='hidden'? 'active' : '' %>">Hidden</a>
+						<a href="/all" class="<%= pagination.state=='all'? 'active' : '' %>">All</a>
+					</div>
+					<div class="pagination">
+						<div class="counter"><%= pagination.total %> Properties</div>
+						<a href="/<%= pagination.state%>/page-<%= pagination.page %>" class="active">List</a>
+						<a href="/map/<%= pagination.state%>/page-<%= pagination.page %>">Map</a>
+					</div>
+					<% if(pagination.pages>1){ %>
+					<div class="pagination" style="float: right;">
+						<% if(pagination.page>1){ %>
+						<a href="./page-<%= pagination.page-1 %>">&laquo;</a>
+						<% } %>
+						<% for (var i = minPage; i <= maxPage; i++) { %>
+						<a href="./page-<%= i%>" class="<%= i==pagination.page ? 'active' : '' %>"><%= i %></a>
+						<% } %>
+						<% if(pagination.page < pagination.pages){ %>
+						<a href="./page-<%= pagination.page+1 %>">&raquo;</a>
+						<% } %>
+					</div>
+					<% } %>
+				</div>
+				<div class="table">
+					<% if (properties.length==0){ %>
+					<div id="empty-gif">
+						<p>Nothing in here bro ¯\_(ツ)_/¯</p>
+						<img src="/images/empty.gif" />
+					</div>
+					<% } else { %>
+					<div class="row header">
+						<div class="cell">
+							Property
+						</div>
+						<div class="cell">
+							Price
+						</div>
+						<div class="cell">
+							Area
+						</div>
+						<div class="cell">
+							Bedrooms
+						</div>
+						<div class="cell">
+							Furniture
+						</div>
+						<div class="cell">
+							Neighborhood
+						</div>
+						<div class="cell">
+							Distance
+						</div>
+						<div class="cell">
+							Commute
+						</div>
+						<div class="cell">
+							Controls
+						</div>
+					</div>
+					<% for (var i = 0; i < properties.length; i++) { %>
+					<div class="row" id="<%= properties[i].id %>">
+						<div class="cell" data-title="Property">
+							<a target="_blank" href="<%= properties[i].url %>">
+								<%= properties[i].name %>
+							</a>
+						</div>
+						<div class="cell" data-title="Price">
+							<%= properties[i].price.toLocaleString('en-NL', {
+								style: 'currency',
+								currency: 'EUR',
+								minimumFractionDigits: 0,
+    							maximumFractionDigits: 0
+							  }) %>
+						</div>
+						<div class="cell" data-title="Area">
+							<%= properties[i].surfaceArea %>m²
+						</div>
+						<div class="cell" data-title="Bedrooms">
+							<%= properties[i].bedrooms %>
+						</div>
+						<div class="cell" data-title="Furniture">
+							<%= properties[i].furniture %>
+						</div>
+						<div class="cell" data-title="Neighborhood">
+							<%= properties[i].neighborhood %>
+						</div>
+						<div class="cell" data-title="Distance">
+							<a target="_blank" href="<%= properties[i].locationUrl %>">
+								<%= (properties[i].distance/1000).toFixed(1) %> Km
+							</a>
+						</div>
+						<div class="cell" data-title="Commute">
+							<a target="_blank" href="<%= properties[i].navigation %>">
+								<%= Math.floor(properties[i].duration / 60) %>m
+							</a>
+						</div>
+						<div class="cell" data-title="Controls">
+							<i class="material-icons" id="notes-icon"
+								title="<%= properties[i].notes && properties[i].notes.length>0 ? properties[i].notes : 'Add notes'%>"
+								data-color="blue" data-notes="<%= properties[i].notes?properties[i].notes:''%>"
+								style="<%= properties[i].notes && properties[i].notes.length>0 ? 'color:blue;' : '' %>"
+								value="<%= properties[i].id %>" onclick="showEditModal(this)">notes</i>
+							<% if(pagination.state!="new"){ %>
+							<i class="material-icons only-one" title="Move back to new list" data-color="violet"
+								style="<%= properties[i].state=='new' ? 'color:violet;' : '' %>"
+								value="<%= properties[i].id %>" onclick="moveTo(this,'new')">fiber_new</i>
+							<% } %><% if(pagination.state!="interesting"){ %>
+							<i class="material-icons only-one" title="Add to the interesting list" data-color="orange"
+								style="<%= properties[i].state=='interesting' ? 'color:orange;' : '' %>"
+								value="<%= properties[i].id %>" onclick="moveTo(this,'interesting')">grade</i>
+							<% } %>
+							<% if(pagination.state!="shortlisted"){ %>
+							<i class="material-icons only-one" title="Add to the shortlist" data-color="green"
+								style="<%= properties[i].state=='shortlisted' ? 'color:green;' : '' %>"
+								value="<%= properties[i].id %>" onclick="moveTo(this,'shortlisted')">favorite</i>
+							<% } %>
+							<% if(pagination.state!="hidden"){ %>
+							<i class="material-icons only-one" title="Hide permanently" data-color="red"
+								style="<%= properties[i].state=='hidden' ? 'color:red;' : '' %>"
+								value="<%= properties[i].id %>" onclick="moveToHidden(this)">delete</i>
+							<% } %>
+						</div>
+					</div>
+					<% } %>
+					<% } %>
+				</div>
+				<% if(pagination.pages>1){ %>
+				<div class="pagination" style="float: right;">
+					<% if(minPage>1){ %>
+					<a href="./page-<%= minPage-1 %>">&laquo;</a>
+					<% } %>
+					<% for (var i = minPage; i <= maxPage; i++) { %>
+					<a href="./page-<%= i%>" class="<%= i==pagination.page ? 'active' : '' %>"><%= i %></a>
+					<% } %>
+					<% if(pagination.page < maxPage){ %>
+					<a href="./page-<%= maxPage+1 %>">&raquo;</a>
+					<% } %>
+				</div>
+				<% } %>
+			</div>
+		</div>
+	</div>
+	<div id="notesModal" class="modal">
+		<div class="modal-content">
+			<textarea id="notes-edit-text" rows="4"></textarea>
+			<span style="display: inline-block; text-align: center;">
+				<i id="modal-check" onclick="updateNotes(this)" class="material-icons modal-button">check</i>
+				<i id="modal-close" onclick="closeEditModal()" class="material-icons modal-button">close</i>
+			</span>
+
+		</div>
+
+	</div>
+
+
+	<!--===============================================================================================-->
+	<script src="/vendor/jquery/jquery-3.2.1.min.js"></script>
+	<!--===============================================================================================-->
+	<script src="/vendor/bootstrap/js/popper.js"></script>
+	<script src="/vendor/bootstrap/js/bootstrap.min.js"></script>
+	<!--===============================================================================================-->
+	<script src="/vendor/select2/select2.min.js"></script>
+	<!--===============================================================================================-->
+	<script src="/javascripts/main.js"></script>
+
+</body>
+
+</html>

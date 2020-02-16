@@ -1,0 +1,424 @@
+/*//////////////////////////////////////////////////////////////////
+[ FONT ]*/
+
+@font-face {
+  font-family: RobotoMono-Regular;
+  src: url('../fonts/RobotoMono/RobotoMono-Regular.ttf');
+}
+
+/*//////////////////////////////////////////////////////////////////
+[ RESTYLE TAG ]*/
+* {
+  margin: 0px;
+  padding: 0px;
+  box-sizing: border-box;
+}
+
+body,
+html {
+  height: 100%;
+  font-family: sans-serif;
+  background: linear-gradient(45deg, #0abf53, #4ee5e5);
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
+/* ------------------------------------ */
+a {
+  margin: 0px;
+  transition: all 0.4s;
+  -webkit-transition: all 0.4s;
+  -o-transition: all 0.4s;
+  -moz-transition: all 0.4s;
+}
+
+a:focus {
+  outline: none !important;
+}
+
+a:hover {
+  text-decoration: none;
+}
+
+/* ------------------------------------ */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0px;
+}
+
+p {
+  margin: 0px;
+}
+
+ul,
+li {
+  margin: 0px;
+  list-style-type: none;
+}
+
+
+/* ------------------------------------ */
+input {
+  display: block;
+  outline: none;
+  border: none !important;
+}
+
+textarea {
+  display: block;
+  outline: none;
+}
+
+textarea:focus,
+input:focus {
+  border-color: transparent !important;
+}
+
+/* ------------------------------------ */
+button {
+  outline: none !important;
+  border: none;
+  background: transparent;
+}
+
+button:hover {
+  cursor: pointer;
+}
+
+iframe {
+  border: none !important;
+}
+
+
+/*//////////////////////////////////////////////////////////////////
+[ Table ]*/
+
+.limiter {
+  width: 100%;
+  margin: 0 auto;
+}
+
+.container-table {
+  width: 100%;
+  /* min-height: 100vh; */
+  /* background: linear-gradient(45deg, #0abf53, #4ee5e5); */
+
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  /* padding: 33px 30px; */
+}
+
+.wrap-table {
+  width: 1100px;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.table {
+  width: 100%;
+  display: table;
+  margin: 0;
+}
+
+#map {
+  width: 100%;
+  height: 40vw;
+  margin: 0;
+}
+
+#empty-gif {
+  width: 100%;
+  height: 20vw;
+  border-style: dashed;
+  border-color: white;
+  text-align: center;
+  display: table-cell;
+  color: white;
+  vertical-align: middle;
+}
+
+@media screen and (max-width: 768px) {
+  .table {
+    display: block;
+  }
+}
+
+.row {
+  display: table-row;
+  background: #fff;
+}
+
+.row.header {
+  color: #ffffff;
+  background: #36304a;
+}
+
+@media screen and (max-width: 768px) {
+  .row {
+    display: block;
+  }
+
+  .row.header {
+    padding: 0;
+    height: 0px;
+  }
+
+  .row.header .cell {
+    display: none;
+  }
+
+  .row .cell:before {
+    font-family: RobotoMono-Regular;
+    font-size: 12px;
+    color: #808080;
+    line-height: 1.2;
+    text-transform: uppercase;
+    font-weight: unset !important;
+
+    margin-bottom: 13px;
+    content: attr(data-title);
+    min-width: 98px;
+    display: block;
+  }
+}
+
+.cell {
+  display: table-cell;
+}
+
+@media screen and (max-width: 768px) {
+  .cell {
+    display: block;
+  }
+}
+
+.row .cell {
+  font-family: RobotoMono-Regular;
+  font-size: 15px;
+  color: #463e5f;
+  line-height: 1.2;
+  font-weight: unset !important;
+  /* text-align: center; */
+
+  padding-top: 20px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #f2f2f2;
+}
+
+.material-icons:hover {
+  cursor: pointer;
+  color: #a0a0a0;
+}
+
+.row.header .cell {
+  font-family: RobotoMono-Regular;
+  font-size: 16px;
+  color: #fff;
+  line-height: 1.2;
+  font-weight: unset !important;
+
+  padding-top: 19px;
+  padding-bottom: 19px;
+}
+
+.row .cell:nth-child(1) {
+  width: 22%;
+  /*360px;*/
+  padding-left: 30px;
+}
+
+.row .cell:nth-child(2) {
+  width: 8%;
+  /*160px;*/
+}
+
+.row .cell:nth-child(3) {
+  width: 8%;
+  /*250px;*/
+}
+
+.row .cell:nth-child(4) {
+  width: 8%;
+  /*190px;*/
+}
+
+.row .cell:nth-child(5) {
+  width: 8%;
+  /*360px;*/
+}
+
+.row .cell:nth-child(6) {
+  width: 15%;
+  /*160px;*/
+}
+
+.row .cell:nth-child(7) {
+  width: 8%;
+  /*250px;*/
+}
+
+.row .cell:nth-child(8) {
+  width: 8%;
+  /*190px;*/
+}
+
+.row .cell:nth-child(9) {
+  width: 15%;
+  /*250px;*/
+}
+
+.header_image {
+  margin: 20px;
+}
+
+.counter {
+  float: left;
+  color: white;
+  background: none;
+  float: left;
+  padding: 8px 16px;
+  text-decoration: none;
+  margin-left: 10px;
+}
+
+.pagination {
+  display: inline-block;
+  background-color: #36304a;
+  margin-top: 8px;
+  margin-bottom: 8px;
+}
+
+.pagination a {
+  color: white;
+  float: left;
+  padding: 8px 16px;
+  text-decoration: none;
+}
+
+.pagination a.active {
+  background-color: #463e5f;
+  color: white;
+  border-radius: 5px;
+}
+
+.pagination a:hover:not(.active) {
+  background-color: #463e5f;
+  border-radius: 5px;
+}
+
+.center {
+  text-align: center;
+}
+
+/* The Modal (background) */
+.modal {
+  display: none;
+  /* Hidden by default */
+  position: fixed;
+  /* Stay in place */
+  z-index: 1;
+  /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%;
+  /* Full width */
+  height: 100%;
+  /* Full height */
+  overflow: auto;
+  /* Enable scroll if needed */
+  background-color: rgb(0, 0, 0);
+  /* Fallback color */
+  background-color: rgba(0, 0, 0, 0.4);
+  /* Black w/ opacity */
+}
+
+/* Modal Content/Box */
+.modal-content {
+  background-color: #fefefe;
+  margin: 15% auto;
+  /* 15% from the top and centered */
+  padding: 5px;
+  border: 1px solid #888;
+  width: 40%;
+  /* Could be more or less, depending on screen size */
+}
+
+/* The Close Button */
+.modal-button {
+  color: #aaa;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+#notes-edit-text {
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  border: none;
+}
+
+.modal-button:hover,
+.modal-button:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.table,
+.row {
+  width: 100% !important;
+}
+
+.row:hover {
+  background-color: #f1f1ff;
+  /* cursor: pointer; */
+}
+
+.row.header:hover {
+  background-color: #463e5f;
+}
+
+@media (max-width: 768px) {
+  .row {
+    border-bottom: 1px solid #f2f2f2;
+    padding-bottom: 18px;
+    padding-top: 30px;
+    padding-right: 15px;
+    margin: 0;
+  }
+
+  .row .cell {
+    border: none;
+    padding-left: 30px;
+    padding-top: 16px;
+    padding-bottom: 16px;
+  }
+
+  .row .cell:nth-child(1) {
+    padding-left: 30px;
+  }
+
+  .row .cell {
+    font-family: RobotoMono-Regular;
+    font-size: 18px;
+    color: #555555;
+    line-height: 1.2;
+    font-weight: unset !important;
+  }
+
+  .table,
+  .row,
+  .cell {
+    width: 100% !important;
+  }
+}
