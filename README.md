@@ -37,6 +37,8 @@ You can then place the key in the config file. (See below)
 
 You can configure different aspects for the app from the [config.js](config.js) file.
 
+Note: since Pararius protected its site with fairlane, the process got a bit trickier. With the current implementation of this project using axios, the user has to first go to https://pararius.com and copy the cookies from the browser.
+
 ```
 // We will parse the listings from this URL, open it in your browser first, adjust the filters and make sure it is in the list mode not the maps.
 config.url = "https://www.pararius.com/apartments/amsterdam/1500-1900/75m2/2-bedrooms/furnished";
@@ -65,6 +67,11 @@ config.googleApiMaxRequestPerSecond = 10
 // Very important to calculate distance, coordinates, and displaying maps in the dashboard.
 // These APIs have to be enabled on https://console.developers.google.com/: Geocoding API, Maps JavaScript API, and Distance Matrix API
 config.googleApi = "GOOGLE_API_KEY"
+
+// Insert your cookies from your browser session. This is used to bypass the "fairlane" protection.
+// there seem to be 3 relevant cookies: fl_d_p_v2_a, fl_mgc and fl_pass_v2_b
+// they should be written here as a string, separated by a semicolon (fl_d_p_v2_a=value; fl_mgc=value2; fl_pass_v2_b=value3)
+config.cookies = "COOKIES_FROM_BROWSER"
 
 // Where to serve the app
 config.port = 8080

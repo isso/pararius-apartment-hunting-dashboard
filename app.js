@@ -17,7 +17,7 @@ const app = express();
 const bodyParser = require('body-parser');
 const cors = require('cors');
 
-let scrapingService = new ScrapingService(config.url, config.updateFrequency);
+let scrapingService = new ScrapingService(config.url, config.updateFrequency, config.cookies);
 let db = new Db();
 let distanceService = new DistanceService(config.commuteAddress, config.commuteMode, config.googleApi);
 

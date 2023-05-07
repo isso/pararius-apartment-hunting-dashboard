@@ -15,10 +15,11 @@ const MAX_RESULT = config.maxScrapingResults;
 
 module.exports = class ScrapingService extends EventEmitter {
 
-  constructor(url, updateFrequency) {
+  constructor(url, updateFrequency, cookies) {
     super();
     this.scrapingWorker = null;
     this.url = url;
+    this.cookies = cookies;
     this.updateFrequency = updateFrequency < 15 ? 15 : updateFrequency;
     this.isWorking = false;
     this._sanitizeUrl();
@@ -46,7 +47,14 @@ module.exports = class ScrapingService extends EventEmitter {
     let self = this;
     var promise = new Promise(function (resolve, reject) {
       throttle(() => {
-        axios.get(self.url + pageNumber).then(function (result) {
+        axios.get(self.url + pageNumber, {
+          headers: {
+            "Cookie": self.cookies,
+            // note: the user agent may need to match the browser you use to get the cookies
+            "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.4844.74 Safari/537.36"
+          },
+          httpsAgent: self.httpsAgent
+        }).then(function (result) {
             resolve(cheerio.load(result.data));
           })
           .catch(function (error) {
@@ -113,20 +121,25 @@ module.exports = class ScrapingService extends EventEmitter {
 
   _scrap($) {
     let self = this;
-    $("ul.search-results-list li.property-list-item-container").each((_, element) => {
-      let id = $(element).attr("data-property-id")
-      let price = parseInt($("p.price", element).clone().children().remove().end().text().replace(/[€,]+/g, '').trim())
-      let name = $("div.details > h2 > a", element).text().replace(/\s\s+/g, ' ').trim()
-      let url = "https://www.pararius.com" + $("div.details > h2 > a", element).attr("href").trim()
-      let zipCode = $("ul.breadcrumbs > li:nth-child(1)", element).text().trim()
-      let city = $("ul.breadcrumbs > li:nth-child(2)", element).text().trim()
-      let neighborhood = $("ul.breadcrumbs > li:nth-child(3)", element).text().trim()
-      let estateAgentName = $("p.estate-agent a", element).text().replace(/\s\s+/g, ' ').trim()
-      let estateAgentLink = $("p.estate-agent a", element).attr("href").trim()
-      let surfaceArea = parseInt($("ul.property-features > li.surface", element).text().trim())
-      let bedrooms = parseInt($("ul.property-features > li.bedrooms", element).text().trim())
-      let furniture = $("ul.property-features > li.furniture", element).text().trim()
-      let availability = $("ul.property-features > li.date", element).text().trim()
+    $("ul.search-list li.search-list__item").each((_, element) => {
+      if ($(element).find(".ad-unit").length > 0) {
+        return;
+      }
+      let id = $(element).find("a.listing-search-item__link").attr("href").split("/")[3];
+      let price = parseInt($(element).find(".listing-search-item__price").text().replace(/[€,]+/g, '').trim());
+      let name = $(element).find(".listing-search-item__title").text().replace(/\s\s+/g, ' ').trim();
+      let url = "https://www.pararius.nl" + $(element).find(".listing-search-item__link").attr("href").trim();
+
+      let location = $(element).find(".listing-search-item__location").text().trim().split(" ");
+      let zipCode = location[0] + " " + location[1];
+      let city = location[2];
+      let neighborhood = location[3].replace('(', '').replace(')', '');
+      let estateAgentName = $(element).find(".listing-search-item__info").text().replace(/\s\s+/g, ' ').trim();
+      let estateAgentLink = "https://www.pararius.nl" + $(element).find(".listing-search-item__link").attr("href").trim();
+      let surfaceArea = parseInt($(element).find(".illustrated-features__item--surface-area").text().replace(/[m²]+/g, '').trim());
+      let bedrooms = parseInt($(element).find(".illustrated-features__item--number-of-rooms").text().replace(/[room]+/g, '').trim());
+      let furniture = $(element).find(".illustrated-features__item--interior").text().trim();
+      let availability = $(element).find(".listing-search-item__availability").text().trim();
       let locationUrl = `https://www.google.com/maps/place/${zipCode.replace(" ","+")}+${city}`
       self.emit("property", {
         id: id,

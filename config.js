@@ -1,7 +1,7 @@
 let config = {};
 
 // We will parse the listings from this URL, open it in your browser first, adjust the filters and make sure it is in the list mode not the maps.
-config.url = "https://www.pararius.com/apartments/amsterdam/1500-1900/75m2/2-bedrooms/furnished";
+config.url = "https://www.pararius.com/apartments/maastricht/0-900";
 
 // Frequency of scraping and updates from Pararius in minutes. (Minimum: 15)
 config.updateFrequency = 60;
@@ -25,10 +25,13 @@ config.parariusMaxRequestPerSecond = 10
 config.googleApisMaxRequestPerSecond = 10
 
 // Very important to calculate distance, coordinates, and displaying maps in the dashboard.
-// These APIs have to be enabled on https://console.developers.google.com/: Geocoding API, Maps JavaScript API, and Distance Matrix API
+// These APIs have to be enabled on https://console.developers.google.com/ : Geocoding API, Maps JavaScript API, and Distance Matrix API
 config.googleApi = "GOOGLE_API_KEY"
 
 // Where to serve the app
 config.port = 8080
+
+// Insert your cookies from your browser session. This is used to bypass the "fairlane" protection.
+config.cookies = "COOKIES_FROM_BROWSER"
 
 module.exports = config;
