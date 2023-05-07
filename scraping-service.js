@@ -49,7 +49,8 @@ module.exports = class ScrapingService extends EventEmitter {
       throttle(() => {
         axios.get(self.url + pageNumber, {
           headers: {
-            "Cookie": this.cookies,
+            "Cookie": self.cookies,
+            // note: the user agent may need to match the browser you use to get the cookies
             "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.4844.74 Safari/537.36"
           },
           httpsAgent: self.httpsAgent

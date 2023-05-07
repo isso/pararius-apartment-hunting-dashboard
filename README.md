@@ -69,6 +69,8 @@ config.googleApiMaxRequestPerSecond = 10
 config.googleApi = "GOOGLE_API_KEY"
 
 // Insert your cookies from your browser session. This is used to bypass the "fairlane" protection.
+// there seem to be 3 relevant cookies: fl_d_p_v2_a, fl_mgc and fl_pass_v2_b
+// they should be written here as a string, separated by a semicolon (fl_d_p_v2_a=value; fl_mgc=value2; fl_pass_v2_b=value3)
 config.cookies = "COOKIES_FROM_BROWSER"
 
 // Where to serve the app
